@@ -1,0 +1,9 @@
+{
+  "Condition": "condition: {    name: \"Baseline Condition\"    enabled: true    baselineDirection: UPPER_ONLY    nrql: {      query: \"SELECT average(duration) FROM Transaction\"    }    signal: {      aggregationWindow: 60      aggregationMethod: EVENT_FLOW      aggregationDelay: 120    }    terms: {      threshold: 13      thresholdDuration: 180      thresholdOccurrences: ALL      operator: ABOVE      priority: CRITICAL    }    violationTimeLimitSeconds: 86400  }",
+  "PolicyId": "3724197",
+  "ConditionType": "Baseline",
+  "Tags": {
+    "Key1": "Create Value 1",
+    "Key2": "Create Value 2"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "Condition": "condition: { name: \"CloudFormation Test Condition Update\"}",
+  "PolicyId": "3724197",
+  "ConditionType": "Baseline",
+  "Tags": {
+    "Key3": "Update Value 3",
+    "Key2": "Update Value 2"
+  }
+}

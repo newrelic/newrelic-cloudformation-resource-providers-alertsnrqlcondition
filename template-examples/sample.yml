@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Sample New Relic Alerts NRQL Condition Template
+Resources:
+  alertspolicyResource:
+    Type: 'NewRelic::Observability::AlertsPolicy'
+    Properties:
+      Name: 'CloudFormation test stack- alert policy'
+      IncidentPreference: 'PER_POLICY'
+
+  StaticConditionResource:
+    Type: 'NewRelic::Observability::AlertsNrqlCondition'
+    Properties:
+      ConditionType: "Static"
+      Condition: >-
+        condition: {
+                    enabled: false,
+                    name: "Test condition",
+                    nrql: {
+                        query: "SELECT uniqueCount(host) FROM Transaction WHERE appName='my-app-name'"
+                    },
+                    terms: {
+                    operator: ABOVE, priority: CRITICAL, threshold: 0, thresholdDuration: 60, thresholdOccurrences: ALL
+                    }
+                }
+      PolicyId: !Ref alertspolicyResource
+      Tags:
+        StationConditionKey: "Static Condition Value"
+  BaselineConditionResource:
+    Type: 'NewRelic::Observability::AlertsNrqlCondition'
+    Properties:
+      ConditionType: "Baseline"
+      Condition: >-
+        condition: {
+          name: "Baseline Condition"
+            enabled: true
+            baselineDirection: UPPER_ONLY
+            nrql: {
+              query: "SELECT average(duration) FROM Transaction"
+            }
+            signal: {
+              aggregationWindow: 60
+                aggregationMethod: EVENT_FLOW
+                aggregationDelay: 120
+            }
+            terms: {
+              threshold: 13
+                thresholdDuration: 180
+                thresholdOccurrences: ALL
+                operator: ABOVE
+                priority: CRITICAL
+            }
+            violationTimeLimitSeconds: 86400
+        }
+      PolicyId: !Ref alertspolicyResource
+      Tags:
+        BaselineConditionKey: "Baseline Condition Value"
+Outputs:
+  StaticConditionId:
+    Value: !GetAtt StaticConditionResource.Id
+  StaticConditionEntityGuid:
+    Value: !GetAtt StaticConditionResource.EntityGuid
+  BaselineConditionId:
+    Value: !GetAtt BaselineConditionResource.Id
+  BaselineConditionEntityGuid:
+    Value: !GetAtt BaselineConditionResource.EntityGuid
