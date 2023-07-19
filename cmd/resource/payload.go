@@ -63,6 +63,10 @@ func (p *Payload) AppendToResourceModels(m model.Model) {
    p.models = append(p.models, m.GetResourceModel())
 }
 
+func (p *Payload) GetTypeName() string {
+   return typeName
+}
+
 //
 // These are API specific, must be configured per API
 //
